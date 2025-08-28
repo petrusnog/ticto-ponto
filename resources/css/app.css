@@ -1,3 +1,26 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "bulma/css/bulma.css";
+
+#app {
+    min-height: 100vh;
+    background: #040204;
+}
+
+
+.tictoponto .logo {
+    width: 150px;
+}
+
+.tictoponto p {
+    color: white;
+}
+
+.tictoponto .button {
+    background: #000;
+    border: 2px solid #000;
+    color: white;
+}
+
+.tictoponto .button:hover {
+    background: white;
+    color: #000;
+}
