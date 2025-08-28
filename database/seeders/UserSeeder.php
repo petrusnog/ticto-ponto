@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Role;
-
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -20,6 +19,7 @@ class UserSeeder extends Seeder
         User::factory()->create([
             'name' => 'Guilherme Petersen',
             'email' => 'gpetersen@ticto.com',
+            'cargo' => 'Chief AI Officer',
             'password' => Hash::make('tictosenha'),
             'role_id' => $adminRole->id
         ]);

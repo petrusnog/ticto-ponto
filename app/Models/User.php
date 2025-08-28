@@ -45,4 +45,28 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Funcionário pertence a um Administrador.
+     */
+    protected function admin()
+    {
+        return $this->belongsTo(User::class, 'admin_id');
+    }
+
+    /**
+     * Administrador possui diversos Funcionários.
+     */
+    protected function funcionarios()
+    {
+        return $this->hasMany(User::class, 'admin_id');
+    }
+
+    /**
+     * Usuário pertence a um Role (nível de acesso).
+     */
+    protected function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
 }
