@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    protected $table = 'users';
+
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
@@ -49,7 +51,7 @@ class User extends Authenticatable
     /**
      * Funcionário pertence a um Administrador.
      */
-    protected function admin()
+    public function admin()
     {
         return $this->belongsTo(User::class, 'admin_id');
     }
@@ -57,7 +59,7 @@ class User extends Authenticatable
     /**
      * Administrador possui diversos Funcionários.
      */
-    protected function funcionarios()
+    public function funcionarios()
     {
         return $this->hasMany(User::class, 'admin_id');
     }
@@ -65,7 +67,7 @@ class User extends Authenticatable
     /**
      * Usuário pertence a um Role (nível de acesso).
      */
-    protected function role()
+    public function role()
     {
         return $this->belongsTo(Role::class);
     }
