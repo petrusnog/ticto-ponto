@@ -20,7 +20,7 @@ class AdminSeeder extends Seeder
             'name' => 'Guilherme Petersen',
             'email' => 'gpetersen@ticto.com',
             'cargo' => 'Chief AI Officer',
-            'password' => Hash::make('tictosenha'),
+            'password' => 'tictosenha',
             'role_id' => $adminRole->id
         ]);
 
@@ -28,7 +28,7 @@ class AdminSeeder extends Seeder
             'name' => 'Thiago Finch',
             'email' => 'tfinch@ticto.com',
             'cargo' => 'CEO',
-            'password' => Hash::make('tictosenha'),
+            'password' => 'tictosenha',
             'role_id' => $adminRole->id
         ]);
     }

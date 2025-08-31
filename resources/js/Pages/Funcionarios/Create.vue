@@ -14,19 +14,20 @@ const form = useForm({
     data_nascimento: '',
     cep: '',
     endereco: '',
+    numero: '',
+    complemento: ''
 
 })
 
 const errorMessage = ref(null)
 const errorCepMessage = ref(null)
-const numero = ref('')
 
 
 const submit = () => {
-    form.post(route('login'), {
-        onFinish: () => form.reset('password'),
+    form.post(route('funcionarios.store'), {
         onError: () => {
-            errorMessage.value = form.errors.email
+            console.log(form.errors);
+            errorMessage.value = form.errors
         }
     });
 }
@@ -41,7 +42,7 @@ const buscarCep = () => {
         .then(response => {
             console.log();
 
-            form.endereco = `${response.data.logradouro}, ${numero.value}, ${response.data.bairro} - ${response.data.localidade}/${response.data.uf}`
+            form.endereco = `${response.data.logradouro}, ${response.data.bairro} - ${response.data.localidade}/${response.data.uf}`
         }).catch(error => {
             errorCepMessage.value = error.response.data.error
         });
@@ -62,75 +63,76 @@ const buscarCep = () => {
                 <div class="field">
                     <label class="label">Nome</label>
                     <div class="control has-icons-left">
-                        <input v-model="form.name" class="input" type="text" placeholder="John Doe">
+                        <input v-model="form.name" class="input" :class="{ 'is-danger' : form.errors.name }" type="text" placeholder="John Doe" required>
                         <span class="icon is-small is-left">
                             <i class="fas fa-user"></i>
                         </span>
                     </div>
+                    <p v-if="form.errors.name" class="help is-danger">{{ form.errors.name }}</p>
                 </div>
 
                 <div class="field">
                     <label class="label">E-mail</label>
                     <div class="control has-icons-left has-icons-right">
-                        <input v-model="form.email" class="input" type="email" placeholder="johndoe@ticto.com" value="">
+                        <input v-model="form.email" class="input" :class="{ 'is-danger' : form.errors.email }" type="email" placeholder="johndoe@ticto.com" value="" required>
                         <span class="icon is-small is-left">
                             <i class="fas fa-envelope"></i>
                         </span>
                     </div>
+                    <p v-if="form.errors.email" class="help is-danger">{{ form.errors.email }}</p>
                 </div>
 
                 <div class="field">
                     <label class="label">CPF</label>
                     <div class="control has-icons-left">
-                        <input v-model="form.cpf" class="input" type="text" placeholder="000.000.000-00" maxlength="14">
+                        <input v-model="form.cpf" class="input" :class="{ 'is-danger' : form.errors.cpf }" type="text" placeholder="000.000.000-00" v-maska="'###.###.###-##'" required>
                         <span class="icon is-small is-left">
                             <i class="fas fa-id-card"></i>
                         </span>
                     </div>
+                    <p v-if="form.errors.cpf" class="help is-danger">{{ form.errors.cpf }}</p>
                 </div>
 
                 <div class="field">
                     <label class="label">Senha</label>
                     <div class="control has-icons-left has-icons-right">
-                        <input v-model="form.password" id="password" class="input" type="password"
-                            placeholder="Digite sua senha">
+                        <input v-model="form.password" id="password" class="input" :class="{ 'is-danger' : form.errors.password }"  type="password"
+                            placeholder="Digite sua senha" required>
                         <span class="icon is-small is-left">
                             <i class="fas fa-lock"></i>
                         </span>
                     </div>
+                    <p v-if="form.errors.password" class="help is-danger">{{ form.errors.password }}</p>
                 </div>
 
                 <div class="field">
                     <label class="label">Cargo</label>
                     <div class="control has-icons-left">
-                        <input v-model="form.cargo" class="input" type="text" placeholder="Desenvolvedor Backend">
+                        <input v-model="form.cargo" class="input" :class="{ 'is-danger' : form.errors.cargo }" type="text" placeholder="Desenvolvedor Backend" required>
                         <span class="icon is-small is-left">
                             <i class="fas fa-user-tie"></i>
                         </span>
                     </div>
+                    <p v-if="form.errors.cargo" class="help is-danger">{{ form.errors.cargo }}</p>
                 </div>
 
                 <div class="field">
                     <label class="label">Data de nascimento</label>
                     <div class="control has-icons-left">
-                        <input v-model="form.data_nascimento" class="input" type="date" name="data">
+                        <input v-model="form.data_nascimento" class="input" :class="{ 'is-danger' : form.errors.data_nascimento }" type="date" name="data" required>
                         <span class="icon is-small is-left">
                             <i class="fas fa-calendar"></i>
                         </span>
                     </div>
+                    <p v-if="form.errors.data_nascimento" class="help is-danger">{{ form.errors.data_nascimento }}</p>
                 </div>
                 <div class="field">
                     <label class="label">CEP</label>
-                    <p class="mb-3">
-                        Escreva o CEP do funcionário e clique no botão ao lado para buscarmos o endereço no serviço
-                        Busca CEP.
-                    </p>
-
                     <div class="field has-addons is-flex is-flex-direction-column">
                         <div class="is-flex">
                             <div class="control is-expanded">
                                 <input v-model="form.cep" v-maska="'########'" class="input"
-                                    :class="{ 'is-danger': errorCepMessage }" type="number"
+                                    :class="{ 'is-danger': errorCepMessage || form.errors.cep }" type="text"
                                     placeholder="Escreva o CEP do funcionário">
                             </div>
                             <div class="control">
@@ -141,7 +143,12 @@ const buscarCep = () => {
                                 </form>
                             </div>
                         </div>
+                        <p v-if="!errorCepMessage && !form.errors.cep"  class="help">
+                            Escreva o CEP do funcionário e clique no botão ao lado para buscarmos o endereço no serviço
+                            Busca CEP.
+                        </p>
                         <p v-if="errorCepMessage" class="help is-danger">{{ errorCepMessage }}</p>
+                        <p v-if="form.errors.cep" class="help is-danger">{{ form.errors.cep }}</p>
                     </div>
                 </div>
                 <div class="field">
@@ -154,10 +161,17 @@ const buscarCep = () => {
                 <div v-if="form.endereco" class="field">
                     <label class="label">Número</label>
                     <div class="control">
-                        <input class="input" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="Ex.: 123"
-                            v-model="numero">
+                        <input class="input" type="text" inputmode="numeric" placeholder="Ex.: 123"
+                            v-model="form.numero">
                     </div>
                     <p class="help">Use apenas números. Informe bloco/apto no campo Complemento.</p>
+                </div>
+                <div v-if="form.endereco" class="field">
+                    <label class="label">Complemento</label>
+                    <div class="control">
+                        <input class="input" type="text" inputmode="numeric" placeholder="Ex.: Ap. 504, Bloco 10"
+                            v-model="form.complemento">
+                    </div>
                 </div>
                 <div class="field is-grouped is-flex is-justify-content-end">
                     <div class="control">

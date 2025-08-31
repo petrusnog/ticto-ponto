@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreFuncionarioRequest;
 use App\Models\Funcionario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
 class FuncionarioController extends Controller
@@ -38,9 +40,18 @@ class FuncionarioController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreFuncionarioRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        $funcionario = new Funcionario();
+        $funcionario->fill($data);
+        $funcionario->password = $data['password'];
+        $funcionario->endereco = $this->montarEnderecoFinal($data['endereco'], $data['numero'], $data['complemento']);
+        $funcionario->admin_id = Auth::user()->id;
+        $funcionario->save();
+
+        return redirect()->route('funcionarios.index')->with('success', 'Funcionário criado com sucesso!');
     }
 
     /**
@@ -73,5 +84,14 @@ class FuncionarioController extends Controller
     public function destroy(Funcionario $funcionario)
     {
         //
+    }
+
+    private function montarEnderecoFinal($endereco, $numero, $complemento)
+    {
+        $partes = explode(',', $endereco);
+        $logradouro = $partes[0];
+        $restante = $partes[1];
+
+        return $logradouro . ', nº ' . $numero . ', ' . $complemento . ',' . $restante;
     }
 }

@@ -34,6 +34,14 @@ class Funcionario extends User
      */
     protected static function booted()
     {
+        parent::booted();
+
+        static::creating(function ($funcionario) {
+            if (!$funcionario->role_id) {
+                $funcionario->role_id = Role::where('name', 'funcionario')->first()->id;
+            }
+        });
+
         static::addGlobalScope('users', function ($query) {
             $query->whereHas('role', function ($q) {
                 $q->where('name', 'funcionario');

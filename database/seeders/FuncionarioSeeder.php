@@ -17,13 +17,13 @@ class FuncionarioSeeder extends Seeder
         $funcionarioRole = Role::where('name', 'funcionario')->first();
 
         User::factory(33)->create([
-            'password' => Hash::make('funcionariosenha'),
+            'password' => 'funcionariosenha',
             'admin_id' => User::where('email', 'gpetersen@ticto.com')->first()->id,
             'role_id' => $funcionarioRole->id
         ]);
 
         User::factory(33)->create([
-            'password' => Hash::make('funcionariosenha'),
+            'password' => 'funcionariosenha',
             'admin_id' => User::where('email', 'tfinch@ticto.com')->first()->id,
             'role_id' => $funcionarioRole->id
         ]);

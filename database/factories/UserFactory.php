@@ -30,7 +30,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
-            'cpf' => CpfHelper::generate(),
+            'cpf' => CpfHelper::generate(true),
             'cargo' => 'Estagiário',
             'data_nascimento' => fake()->dateTimeBetween('-65 years', '+18 years')->format('Y-m-d')
         ];
