@@ -44,7 +44,7 @@ const formatDate = (date) => {
                         <td>
                             <div class="buttons">
                                 <a href="#" @click="goTo('funcionarios.edit', 'GET', func.id)" class="button is-small is-info">Editar</a>
-                                <a href="#" class="button is-small is-danger">Excluir</a>
+                                <a href="#" @click="goTo('funcionarios.destroy', 'DELETE', func.id)" class="button is-small is-danger">Excluir</a>
                             </div>
                         </td>
                     </tr>

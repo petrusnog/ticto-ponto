@@ -25,5 +25,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/store', [FuncionarioController::class, 'store'])->name('store');
         Route::get('/{id}/edit', [FuncionarioController::class, 'edit'])->name('edit');
         Route::put('/{id}/update', [FuncionarioController::class, 'update'])->name('update');
+        Route::delete('/{id}', [FuncionarioController::class, 'destroy'])->name('destroy');
     });
 });
