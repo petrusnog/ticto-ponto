@@ -19,5 +19,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ]);
     })->name('dashboard');
 
-    Route::get('/funcionarios', [FuncionarioController::class, 'index'])->name('funcionarios.index');
+    Route::prefix('funcionarios')->name('funcionarios.')->group(function () {
+        Route::get('/', [FuncionarioController::class, 'index'])->name('index');
+        Route::get('/create', [FuncionarioController::class, 'create'])->name('create');
+    });
 });

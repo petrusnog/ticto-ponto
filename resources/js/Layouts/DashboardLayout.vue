@@ -6,7 +6,7 @@ import Sidebar from '../Components/Sidebar.vue';
 </script>
 
 <template>
-    <section class="section">
+    <section class="section ticto">
        <div class="container">
           <Header></Header>
           <div class="columns">
@@ -23,3 +23,11 @@ import Sidebar from '../Components/Sidebar.vue';
        </div>
     </section>
  </template>
+
+<style>
+
+.ticto .box {
+   min-height: 660px;
+}
+
+</style>

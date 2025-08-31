@@ -1,14 +1,6 @@
 <script setup>
 
-import { router } from '@inertiajs/vue3'
-
-const goTo = (routeName, method = 'GET') => {
-    if (method == 'POST') {
-        router.post(route(routeName));
-    } else {
-        router.get(route(routeName));
-    }
-}
+import goTo from '@/goTo.js'
 
 </script>
 
@@ -18,8 +10,8 @@ const goTo = (routeName, method = 'GET') => {
             Geral
         </p>
         <ul class="menu-list">
-            <li class="mb-2"><a @click.prevent="goTo('dashboard')" class="is-active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-            <li class="mb-2"><a @click.prevent="goTo('funcionarios.index')"><i class="fas fa-users"></i> Funcionários</a></li>
+            <li class="mb-2"><a @click.prevent="goTo('dashboard')" :class="{ 'is-active' : route().current('dashboard') }"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li class="mb-2"><a @click.prevent="goTo('funcionarios.index')" :class="{ 'is-active' : route().current('funcionarios.*') }"><i class="fas fa-users"></i> Funcionários</a></li>
             <li class="mb-2"><a><i class="fas fa-chart-line"></i> Relatórios</a></li>
         </ul>
 

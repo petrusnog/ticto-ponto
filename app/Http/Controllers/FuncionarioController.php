@@ -32,7 +32,7 @@ class FuncionarioController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Funcionarios/Create');
     }
 
     /**

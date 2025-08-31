@@ -1,16 +1,13 @@
 <script setup>
 
 import DashboardLayout from '../../Layouts/DashboardLayout.vue'
-import { Link, router } from '@inertiajs/vue3'
+import { Link } from '@inertiajs/vue3'
 import dayjs from 'dayjs'
+import goTo from '@/goTo.js'
 
 const props = defineProps({
     funcionarios: { type: Object }
 });
-
-const logout = () => {
-    router.post(route('logout'));
-}
 
 const formatDate = (date) => {
   return dayjs(date).format('DD/MM/YYYY');
@@ -23,7 +20,7 @@ const formatDate = (date) => {
         <div class="box">
             <div class="is-flex is-justify-content-space-between is-align-items-center">
                 <h3 class="title is-4">Funcionários</h3>
-                <button class="button is-success"><i class="fas fa-users mr-2"></i> Criar novo</button>
+                <button @click="goTo('funcionarios.create')" class="button is-success"><i class="fas fa-users mr-2"></i> Criar novo</button>
             </div>
 
             <table class="table is-striped is-fullwidth is-hoverable">
