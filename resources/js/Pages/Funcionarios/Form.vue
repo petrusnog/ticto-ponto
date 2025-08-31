@@ -4,32 +4,53 @@ import { ref } from 'vue';
 import DashboardLayout from '@/Layouts/DashboardLayout.vue';
 import { useForm } from '@inertiajs/vue3';
 import axios from 'axios';
+import goTo from '@/goTo';
+
+const props = defineProps({
+    funcionario: {
+        type: Object,
+        default: null
+    }
+});
 
 const form = useForm({
-    name: '',
-    email: '',
-    cpf: '',
+    name: props.funcionario ? props.funcionario.name : '',
+    email: props.funcionario ? props.funcionario.email : '',
+    cpf: props.funcionario ? props.funcionario.cpf : '',
     password: '',
-    cargo: '',
-    data_nascimento: '',
-    cep: '',
-    endereco: '',
+    cargo: props.funcionario ? props.funcionario.cargo : '',
+    data_nascimento: props.funcionario ? props.funcionario.data_nascimento : '',
+    cep: props.funcionario ? props.funcionario.cep : '',
+    endereco: props.funcionario ? props.funcionario.endereco : '',
     numero: '',
     complemento: ''
 
 })
 
+const screenMode = ref(props.funcionario ? 'edit' : 'create')
 const errorMessage = ref(null)
 const errorCepMessage = ref(null)
+const showNumberAndComplement = ref(false)
 
 
 const submit = () => {
-    form.post(route('funcionarios.store'), {
-        onError: () => {
-            console.log(form.errors);
-            errorMessage.value = form.errors
-        }
-    });
+    if (props.funcionario) {
+        // Edição de funcionário.
+        form.put(route('funcionarios.update', props.funcionario.id), {
+            onError: () => {
+                console.log(form.errors)
+                errorMessage.value = form.errors
+            }
+        })
+    } else {
+        // Criação de funcionário.
+        form.post(route('funcionarios.store'), {
+            onError: () => {
+                console.log(form.errors);
+                errorMessage.value = form.errors
+            }
+        });
+    }
 }
 
 const buscarCep = () => {
@@ -40,9 +61,8 @@ const buscarCep = () => {
 
     axios.get(url)
         .then(response => {
-            console.log();
-
             form.endereco = `${response.data.logradouro}, ${response.data.bairro} - ${response.data.localidade}/${response.data.uf}`
+            showNumberAndComplement.value = true
         }).catch(error => {
             errorCepMessage.value = error.response.data.error
         });
@@ -54,8 +74,8 @@ const buscarCep = () => {
     <DashboardLayout>
         <div class="box">
             <div class="is-flex is-justify-content-space-between is-align-items-center mb-5">
-                <h3 class="title is-4">Criar novo funcionário</h3>
-                <button class="button is-warning" onclick="history.back()">
+                <h3 class="title is-4">{{ screenMode == 'edit' ? 'Editar' : 'Criar novo' }} funcionário</h3>
+                <button class="button is-warning" @click="goTo('funcionarios.index')">
                     <i class="fas fa-arrow-left mr-3"></i> Voltar
                 </button>
             </div>
@@ -63,7 +83,8 @@ const buscarCep = () => {
                 <div class="field">
                     <label class="label">Nome</label>
                     <div class="control has-icons-left">
-                        <input v-model="form.name" class="input" :class="{ 'is-danger' : form.errors.name }" type="text" placeholder="John Doe" required>
+                        <input v-model="form.name" class="input" :class="{ 'is-danger': form.errors.name }" type="text"
+                            placeholder="John Doe" required>
                         <span class="icon is-small is-left">
                             <i class="fas fa-user"></i>
                         </span>
@@ -74,7 +95,8 @@ const buscarCep = () => {
                 <div class="field">
                     <label class="label">E-mail</label>
                     <div class="control has-icons-left has-icons-right">
-                        <input v-model="form.email" class="input" :class="{ 'is-danger' : form.errors.email }" type="email" placeholder="johndoe@ticto.com" value="" required>
+                        <input v-model="form.email" class="input" :class="{ 'is-danger': form.errors.email }"
+                            type="email" placeholder="johndoe@ticto.com" value="" required>
                         <span class="icon is-small is-left">
                             <i class="fas fa-envelope"></i>
                         </span>
@@ -85,7 +107,8 @@ const buscarCep = () => {
                 <div class="field">
                     <label class="label">CPF</label>
                     <div class="control has-icons-left">
-                        <input v-model="form.cpf" class="input" :class="{ 'is-danger' : form.errors.cpf }" type="text" placeholder="000.000.000-00" v-maska="'###.###.###-##'" required>
+                        <input v-model="form.cpf" class="input" :class="{ 'is-danger': form.errors.cpf }" type="text"
+                            placeholder="000.000.000-00" v-maska="'###.###.###-##'" required>
                         <span class="icon is-small is-left">
                             <i class="fas fa-id-card"></i>
                         </span>
@@ -96,8 +119,9 @@ const buscarCep = () => {
                 <div class="field">
                     <label class="label">Senha</label>
                     <div class="control has-icons-left has-icons-right">
-                        <input v-model="form.password" id="password" class="input" :class="{ 'is-danger' : form.errors.password }"  type="password"
-                            placeholder="Digite sua senha" required>
+                        <input v-model="form.password" id="password" class="input"
+                            :class="{ 'is-danger': form.errors.password }" type="password"
+                            placeholder="Digite sua senha" :required="screenMode == 'create'">
                         <span class="icon is-small is-left">
                             <i class="fas fa-lock"></i>
                         </span>
@@ -108,7 +132,8 @@ const buscarCep = () => {
                 <div class="field">
                     <label class="label">Cargo</label>
                     <div class="control has-icons-left">
-                        <input v-model="form.cargo" class="input" :class="{ 'is-danger' : form.errors.cargo }" type="text" placeholder="Desenvolvedor Backend" required>
+                        <input v-model="form.cargo" class="input" :class="{ 'is-danger': form.errors.cargo }"
+                            type="text" placeholder="Desenvolvedor Backend" required>
                         <span class="icon is-small is-left">
                             <i class="fas fa-user-tie"></i>
                         </span>
@@ -119,7 +144,8 @@ const buscarCep = () => {
                 <div class="field">
                     <label class="label">Data de nascimento</label>
                     <div class="control has-icons-left">
-                        <input v-model="form.data_nascimento" class="input" :class="{ 'is-danger' : form.errors.data_nascimento }" type="date" name="data" required>
+                        <input v-model="form.data_nascimento" class="input"
+                            :class="{ 'is-danger': form.errors.data_nascimento }" type="date" name="data" required>
                         <span class="icon is-small is-left">
                             <i class="fas fa-calendar"></i>
                         </span>
@@ -143,7 +169,7 @@ const buscarCep = () => {
                                 </form>
                             </div>
                         </div>
-                        <p v-if="!errorCepMessage && !form.errors.cep"  class="help">
+                        <p v-if="!errorCepMessage && !form.errors.cep" class="help">
                             Escreva o CEP do funcionário e clique no botão ao lado para buscarmos o endereço no serviço
                             Busca CEP.
                         </p>
@@ -158,7 +184,7 @@ const buscarCep = () => {
                     </div>
                 </div>
 
-                <div v-if="form.endereco" class="field">
+                <div v-if="form.endereco && showNumberAndComplement" class="field">
                     <label class="label">Número</label>
                     <div class="control">
                         <input class="input" type="text" inputmode="numeric" placeholder="Ex.: 123"
@@ -166,7 +192,7 @@ const buscarCep = () => {
                     </div>
                     <p class="help">Use apenas números. Informe bloco/apto no campo Complemento.</p>
                 </div>
-                <div v-if="form.endereco" class="field">
+                <div v-if="form.endereco && showNumberAndComplement" class="field">
                     <label class="label">Complemento</label>
                     <div class="control">
                         <input class="input" type="text" inputmode="numeric" placeholder="Ex.: Ap. 504, Bloco 10"
@@ -175,7 +201,7 @@ const buscarCep = () => {
                 </div>
                 <div class="field is-grouped is-flex is-justify-content-end">
                     <div class="control">
-                        <button class="button is-black">Cadastrar</button>
+                        <button class="button is-black">{{ screenMode == 'edit' ? 'Atualizar' : 'Cadastrar' }}</button>
                     </div>
                 </div>
             </form>

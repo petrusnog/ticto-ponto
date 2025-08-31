@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreFuncionarioRequest;
+use App\Http\Requests\UpdateFuncionarioRequest;
+use App\Http\Resources\FuncionarioResource;
 use App\Models\Funcionario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,7 +36,7 @@ class FuncionarioController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Funcionarios/Create');
+        return Inertia::render('Funcionarios/Form');
     }
 
     /**
@@ -47,7 +49,15 @@ class FuncionarioController extends Controller
         $funcionario = new Funcionario();
         $funcionario->fill($data);
         $funcionario->password = $data['password'];
-        $funcionario->endereco = $this->montarEnderecoFinal($data['endereco'], $data['numero'], $data['complemento']);
+
+        if (!empty($data['numero']) || !empty($data['complemento'])) {
+            $funcionario->endereco = $this->montarEnderecoFinal(
+                $data['endereco'],
+                $data['numero'],
+                $data['complemento']
+            );
+        }
+
         $funcionario->admin_id = Auth::user()->id;
         $funcionario->save();
 
@@ -65,17 +75,41 @@ class FuncionarioController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Funcionario $funcionario)
+    public function edit($id)
     {
-        //
+        $funcionario = Funcionario::findOrFail($id);
+
+        return Inertia::render('Funcionarios/Form', [
+            'funcionario' => FuncionarioResource::make($funcionario)->resolve(),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Funcionario $funcionario)
+    public function update(UpdateFuncionarioRequest $request, $id)
     {
-        //
+        $data = $request->validated();
+
+        $funcionario = Funcionario::findOrFail($id);
+        $funcionario->fill($data);
+
+        // Não enviar data[password] caso o usuário não preencha.
+        if (empty($data['password'])) {
+            unset($data['password']);
+        }
+
+        if (!empty($data['numero']) || !empty($data['complemento'])) {
+            $funcionario->endereco = $this->montarEnderecoFinal(
+                $data['endereco'],
+                $data['numero'],
+                $data['complemento']
+            );
+        }
+
+        $funcionario->save();
+
+        return redirect()->route('funcionarios.index')->with('success', 'Funcionário atualizado com sucesso!');
     }
 
     /**
@@ -92,6 +126,18 @@ class FuncionarioController extends Controller
         $logradouro = $partes[0];
         $restante = $partes[1];
 
-        return $logradouro . ', nº ' . $numero . ', ' . $complemento . ',' . $restante;
+        $enderecoFinal = $logradouro;
+
+        if (!empty($numero)) {
+            $enderecoFinal .= ', nº ' . $numero;
+        }
+
+        if (!empty($complemento)) {
+            $enderecoFinal .= ', ' . $complemento;
+        }
+
+        $enderecoFinal .= ', ' . $restante;
+
+        return $enderecoFinal;
     }
 }

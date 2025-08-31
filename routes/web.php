@@ -23,5 +23,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/', [FuncionarioController::class, 'index'])->name('index');
         Route::get('/create', [FuncionarioController::class, 'create'])->name('create');
         Route::post('/store', [FuncionarioController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [FuncionarioController::class, 'edit'])->name('edit');
+        Route::put('/{id}/update', [FuncionarioController::class, 'update'])->name('update');
     });
 });
