@@ -2,7 +2,7 @@
 
 import { computed, ref } from 'vue';
 import DashboardLayout from '@/Layouts/DashboardLayout.vue';
-import { useForm, usePage } from '@inertiajs/vue3';
+import { Head, useForm, usePage } from '@inertiajs/vue3';
 import axios from 'axios';
 import goTo from '@/goTo';
 
@@ -81,6 +81,7 @@ const back = () => {
 
 <template>
     <DashboardLayout>
+        <Head :title="(screenMode == 'edit' ? 'Editar' : 'Criar novo') + ' funcionário'"></Head>
         <div class="box">
             <div v-if="errorMessage" class="notification is-danger">
                 <ul>

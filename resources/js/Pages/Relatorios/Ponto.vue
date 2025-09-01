@@ -1,6 +1,6 @@
 <script setup>
 import DashboardLayout from '@/Layouts/DashboardLayout.vue';
-import { useForm, usePage } from '@inertiajs/vue3';
+import { Head, useForm, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 const props = defineProps({
@@ -33,6 +33,7 @@ const submit = () => {
 
 <template>
     <DashboardLayout>
+        <Head title="Relatórios"></Head>
         <div class="box">
             <div v-if="errorMessage" class="notification is-danger">
                 <ul>

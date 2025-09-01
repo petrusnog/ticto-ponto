@@ -1,7 +1,7 @@
 <script setup>
 
 import DashboardLayout from '../Layouts/DashboardLayout.vue'
-import { router, useForm, usePage } from '@inertiajs/vue3'
+import { Head, router, useForm, usePage } from '@inertiajs/vue3'
 import { computed, ref } from "vue"
 
 const props = defineProps({
@@ -37,6 +37,7 @@ const registrarPonto = () => {
 
 <template>
    <DashboardLayout>
+      <Head title="Página Inicial"></Head>
       <div class="box">
          <div v-if="page.props.flash.success" class="notification is-success">
             {{ page.props.flash.success }}

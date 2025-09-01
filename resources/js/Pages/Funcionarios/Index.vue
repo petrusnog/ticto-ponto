@@ -1,7 +1,7 @@
 <script setup>
 
 import DashboardLayout from '../../Layouts/DashboardLayout.vue'
-import { Link, usePage } from '@inertiajs/vue3'
+import { Head, Link, usePage } from '@inertiajs/vue3'
 import dayjs from 'dayjs'
 import goTo from '@/goTo.js'
 
@@ -19,6 +19,7 @@ const formatDate = (date) => {
 
 <template>
     <DashboardLayout>
+        <Head title="Funcionários"></Head>
         <div class="box">
             <div v-if="page.props.flash.success" class="notification is-success">
                 {{ page.props.flash.success }}

@@ -1,7 +1,7 @@
 <script setup>
 
 import { ref } from 'vue';
-import { useForm } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 import AuthLayout from '../../Layouts/AuthLayout.vue'
 
 const form = useForm({
@@ -24,6 +24,7 @@ const submit = () => {
 </script>
 
 <template>
+  <Head title="Login"></Head>
   <AuthLayout>
     <div v-if="errorMessage" class="notification is-danger">
       {{ errorMessage }}
