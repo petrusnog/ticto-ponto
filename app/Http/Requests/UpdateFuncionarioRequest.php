@@ -11,10 +11,26 @@ class UpdateFuncionarioRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
+     * 
+     * Ou estou editando meu próprio perfil, ou eu tenho permissão admin para editar meus funcionários.
      */
     public function authorize(): bool
     {
-        return Auth::user()->role->name === 'admin';
+        $user = Auth::user();
+        $funcionarioId = (integer) $this->route('id');
+
+        if ($user->id === $funcionarioId) {
+            return true;
+        }
+
+        // Se sou admin, só tenho permissão para editar funcionários sob minha gestão direta.
+        if ($user->role->name === 'admin') {
+            $funcionario = \App\Models\User::find($funcionarioId);
+
+            return $funcionario && $funcionario->admin_id === $user->id;
+        }
+
+        return false;
     }
 
     /**
@@ -66,6 +82,7 @@ class UpdateFuncionarioRequest extends FormRequest
             'cpf.max' => 'O CPF deve ter exatamente 14 caracteres.',
             'cep.min' => 'O CEP deve ter 8 caracteres.',
             'cep.max' => 'O CEP deve ter 8 caracteres.',
+            'name.required' => 'O campo nome é obrigatório.'
         ];
     }
 }

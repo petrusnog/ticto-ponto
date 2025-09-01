@@ -31,7 +31,7 @@ const role = computed(() => user.value?.role?.name ?? null)
             Configurações
         </p>
         <ul class="menu-list">
-            <li class="mb-2"><a><i class="fas fa-user-cog"></i> Perfil</a></li>
+            <li v-if="role == 'funcionario'" class="mb-2"><a @click="goTo('funcionarios.edit', 'GET', user.id)"><i class="fas fa-user-cog"></i> Perfil</a></li>
             <li class="mb-2"><a @click.prevent="goTo('logout', 'POST')" class="has-text-danger"><i
                         class="fas fa-sign-out-alt"></i> Sair</a></li>
         </ul>

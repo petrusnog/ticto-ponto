@@ -109,7 +109,15 @@ class FuncionarioController extends Controller
 
         $funcionario->save();
 
-        return redirect()->route('funcionarios.index')->with('success', 'Funcionário atualizado com sucesso!');
+        if (Auth::user()->role->name === 'funcionario') {
+            return redirect()
+                ->route('dashboard')
+                ->with('success', 'Perfil atualizado com sucesso!');
+        }
+
+        return redirect()
+            ->route('funcionarios.index')
+            ->with('success', 'Funcionário atualizado com sucesso!');
     }
 
     /**

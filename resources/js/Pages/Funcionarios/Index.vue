@@ -1,16 +1,18 @@
 <script setup>
 
 import DashboardLayout from '../../Layouts/DashboardLayout.vue'
-import { Link } from '@inertiajs/vue3'
+import { Link, usePage } from '@inertiajs/vue3'
 import dayjs from 'dayjs'
 import goTo from '@/goTo.js'
+
+const page = usePage();
 
 const props = defineProps({
     funcionarios: { type: Object }
 });
 
 const formatDate = (date) => {
-  return dayjs(date).format('DD/MM/YYYY');
+    return dayjs(date).format('DD/MM/YYYY');
 };
 
 </script>
@@ -18,9 +20,13 @@ const formatDate = (date) => {
 <template>
     <DashboardLayout>
         <div class="box">
+            <div v-if="page.props.flash.success" class="notification is-success">
+                {{ page.props.flash.success }}
+            </div>
             <div class="is-flex is-justify-content-space-between is-align-items-center">
                 <h3 class="title is-4">Funcionários</h3>
-                <button @click="goTo('funcionarios.create')" class="button is-success"><i class="fas fa-users mr-2"></i> Criar novo</button>
+                <button @click="goTo('funcionarios.create')" class="button is-success"><i class="fas fa-users mr-2"></i>
+                    Criar novo</button>
             </div>
 
             <table class="table is-striped is-fullwidth is-hoverable">
@@ -43,8 +49,10 @@ const formatDate = (date) => {
                         <td>{{ formatDate(func.created_at) }}</td>
                         <td>
                             <div class="buttons">
-                                <a href="#" @click="goTo('funcionarios.edit', 'GET', func.id)" class="button is-small is-info">Editar</a>
-                                <a href="#" @click="goTo('funcionarios.destroy', 'DELETE', func.id)" class="button is-small is-danger">Excluir</a>
+                                <a href="#" @click="goTo('funcionarios.edit', 'GET', func.id)"
+                                    class="button is-small is-info">Editar</a>
+                                <a href="#" @click="goTo('funcionarios.destroy', 'DELETE', func.id)"
+                                    class="button is-small is-danger">Excluir</a>
                             </div>
                         </td>
                     </tr>
@@ -53,10 +61,10 @@ const formatDate = (date) => {
 
             <div class="is-flex is-justify-content-center gap-2 mt-4">
                 <template v-for="link in funcionarios.links" :key="link.url">
-                <Link v-if="link.url" :href="link.url" v-html="link.label"
-                    class="pagination-item button is-info px-3 py-1 mr-4 border rounded"
-                    :class="{ 'is-dark font-bold': link.active }" />
-                <span v-else v-html="link.label" class="button px-3 py-1 mr-4" disabled></span>
+                    <Link v-if="link.url" :href="link.url" v-html="link.label"
+                        class="pagination-item button is-info px-3 py-1 mr-4 border rounded"
+                        :class="{ 'is-dark font-bold': link.active }" />
+                    <span v-else v-html="link.label" class="button px-3 py-1 mr-4" disabled></span>
                 </template>
             </div>
         </div>

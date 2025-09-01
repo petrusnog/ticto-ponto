@@ -71,6 +71,13 @@ const buscarCep = () => {
 <template>
     <DashboardLayout>
         <div class="box">
+            <div v-if="errorMessage" class="notification is-danger">
+                <ul>
+                    <li v-for="error in errorMessage">
+                        {{ error }}
+                    </li>
+                </ul>
+            </div>
             <div class="is-flex is-justify-content-space-between is-align-items-center mb-5">
                 <h3 class="title is-4">{{ screenMode == 'edit' ? 'Editar' : 'Criar novo' }} funcionário</h3>
                 <button class="button is-warning" @click="goTo('funcionarios.index')">
@@ -94,7 +101,7 @@ const buscarCep = () => {
                     <label class="label">E-mail</label>
                     <div class="control has-icons-left has-icons-right">
                         <input v-model="form.email" class="input" :class="{ 'is-danger': form.errors.email }"
-                            type="email" placeholder="johndoe@ticto.com" value="" required>
+                            type="email" placeholder="johndoe@ticto.com" value="" :required="screenMode == 'create'" :disabled="screenMode == 'edit'">
                         <span class="icon is-small is-left">
                             <i class="fas fa-envelope"></i>
                         </span>
@@ -106,7 +113,7 @@ const buscarCep = () => {
                     <label class="label">CPF</label>
                     <div class="control has-icons-left">
                         <input v-model="form.cpf" class="input" :class="{ 'is-danger': form.errors.cpf }" type="text"
-                            placeholder="000.000.000-00" v-maska="'###.###.###-##'" required>
+                            placeholder="000.000.000-00" v-maska="'###.###.###-##'" :required="screenMode == 'create'" :disabled="screenMode == 'edit'">
                         <span class="icon is-small is-left">
                             <i class="fas fa-id-card"></i>
                         </span>
