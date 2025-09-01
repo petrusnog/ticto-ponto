@@ -42,7 +42,7 @@ php artisan migrate --seed
 npm install
 npm run dev
 
-# Rodar servidor
+# Rodar servidor (Abrir uma nova aba de terminal)
 php artisan serve
 ```
 
