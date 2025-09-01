@@ -8,9 +8,11 @@ O sistema permite que **funcionários registrem pontos** e que **administradores
 ## 🚀 Configuração Rápida (Ambiente Local)
 
 ### Pré-requisitos
-- PHP 8.2+  
+- PHP v8.2.29+  
 - Composer  
-- MySQL (InnoDB)  
+- MySQL (InnoDB)
+- Node.js v20.13.1+
+- NPM v10.5.2+
 - Vue.js 3
 
 ### Importante:
