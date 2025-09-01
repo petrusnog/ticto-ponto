@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Http\Requests\StoreFuncionarioRequest;
 use App\Http\Requests\UpdateFuncionarioRequest;
 use App\Http\Resources\FuncionarioResource;
 use App\Models\Funcionario;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -13,13 +15,17 @@ use Inertia\Inertia;
 
 class FuncionarioController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * GET /funcionarios
-     * 
+     *
      * Tela de listagem de funcionários.
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', User::class);
+
         $funcionario = Funcionario::query()
             ->whereBelongsTo(Auth::user(), 'admin')
             ->with('admin')
@@ -36,6 +42,8 @@ class FuncionarioController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', User::class);
+
         return Inertia::render('Funcionarios/Form');
     }
 
@@ -44,6 +52,8 @@ class FuncionarioController extends Controller
      */
     public function store(StoreFuncionarioRequest $request)
     {
+        $this->authorize('create', User::class);
+
         $data = $request->validated();
 
         $funcionario = new Funcionario();
@@ -65,19 +75,13 @@ class FuncionarioController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Funcionario $funcionario)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit($id)
     {
         $funcionario = Funcionario::findOrFail($id);
+
+        $this->authorize('update', $funcionario);
 
         return Inertia::render('Funcionarios/Form', [
             'funcionario' => FuncionarioResource::make($funcionario)->resolve(),
@@ -92,6 +96,9 @@ class FuncionarioController extends Controller
         $data = $request->validated();
 
         $funcionario = Funcionario::findOrFail($id);
+
+        $this->authorize('update', $funcionario);
+
         $funcionario->fill($data);
 
         // Não enviar data[password] caso o usuário não preencha.
@@ -126,6 +133,9 @@ class FuncionarioController extends Controller
     public function destroy($id)
     {
         $funcionario = Funcionario::findOrFail($id);
+
+        $this->authorize('destroy', $funcionario);
+
         $funcionario->delete();
 
         redirect()->route('funcionarios.index')->with('sucess', 'Funcionário deletado com sucesso!');

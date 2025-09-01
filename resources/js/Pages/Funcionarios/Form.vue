@@ -1,8 +1,8 @@
 <script setup lang="ts">
 
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import DashboardLayout from '@/Layouts/DashboardLayout.vue';
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
 import axios from 'axios';
 import goTo from '@/goTo';
 
@@ -27,6 +27,9 @@ const form = useForm({
 
 })
 
+const page = usePage();
+const user = computed(() => page.props.auth?.user ?? null)
+const role = computed(() => user.value?.role?.name ?? null)
 const screenMode = ref(props.funcionario ? 'edit' : 'create')
 const errorMessage = ref(null)
 const errorCepMessage = ref(null)
@@ -66,6 +69,14 @@ const buscarCep = () => {
         });
 }
 
+const back = () => {
+    if (role.value == 'admin') {
+        goTo('funcionarios.index')
+    } else {
+        goTo('dashboard')
+    }
+}
+
 </script>
 
 <template>
@@ -80,7 +91,7 @@ const buscarCep = () => {
             </div>
             <div class="is-flex is-justify-content-space-between is-align-items-center mb-5">
                 <h3 class="title is-4">{{ screenMode == 'edit' ? 'Editar' : 'Criar novo' }} funcionário</h3>
-                <button class="button is-warning" @click="goTo('funcionarios.index')">
+                <button class="button is-warning" @click="back()">
                     <i class="fas fa-arrow-left mr-3"></i> Voltar
                 </button>
             </div>

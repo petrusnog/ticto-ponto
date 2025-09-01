@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Http\Requests\RelatorioPontoRequest;
 use App\Models\Ponto;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -11,11 +13,15 @@ use Inertia\Inertia;
 
 class PontoController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $this->authorize('verRelatorio', User::class);
+
         return Inertia::render('Relatorios/Ponto');
     }
 
@@ -25,6 +31,8 @@ class PontoController extends Controller
      */
     public function relatorio(RelatorioPontoRequest $request)
     {
+        $this->authorize('verRelatorio', User::class);
+
         $data = $request->validated();
 
         $data_inicial = Carbon::now()->format('Y-m-d') . ' 00:00:00';
