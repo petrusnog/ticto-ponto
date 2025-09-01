@@ -11,7 +11,16 @@ O sistema permite que **funcionários registrem pontos** e que **administradores
 - PHP 8.2+  
 - Composer  
 - MySQL (InnoDB)  
-- Node.js + NPM  
+- Vue.js 3
+
+### Importante:
+1. Antes de rodar as migrations, certifique-se de que o seu banco de dados já foi criado:
+
+```sql
+CREATE DATABASE ticto_ponto;
+```
+
+2. Após copiar o .env de .env.example, ajustar as credenciais de banco para os do seu respectivo SGBD.
 
 ### Passos
 ```bash
