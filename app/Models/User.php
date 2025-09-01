@@ -76,6 +76,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Usuário possui diversos Pontos.
+     */
+    public function pontos()
+    {
+        return $this->hasMany(Ponto::class);
+    }
+
+    /**
      * Usuário pertence a um Role (nível de acesso).
      */
     public function role()

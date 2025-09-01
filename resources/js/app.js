@@ -23,6 +23,7 @@ createInertiaApp({
             .use(ZiggyVue);
         
         app.directive("maska", vMaska);
+        app.provide("user", props.initialPage.props.auth?.user ?? null);
 
         app.mount(el);
     },

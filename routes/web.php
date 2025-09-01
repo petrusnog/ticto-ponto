@@ -1,23 +1,16 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FuncionarioController;
-use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\PontoController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
-
 
 require __DIR__.'/auth.php';
 
-
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/', function () {
-        return Inertia::render('Dashboard', [
-            'user' => Auth::user()
-        ]);
-    })->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::prefix('funcionarios')->name('funcionarios.')->group(function () {
         Route::get('/', [FuncionarioController::class, 'index'])->name('index');
@@ -26,5 +19,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/{id}/edit', [FuncionarioController::class, 'edit'])->name('edit');
         Route::put('/{id}/update', [FuncionarioController::class, 'update'])->name('update');
         Route::delete('/{id}', [FuncionarioController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('pontos')->name('pontos.')->group(function () {
+        Route::post('/store', [PontoController::class, 'store'])->name('store');
     });
 });
