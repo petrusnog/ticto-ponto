@@ -43,7 +43,7 @@ const submit = () => {
             </div>
             <h1 class="title">Relatório de pontos eletrônicos</h1>
             <p class="mb-5">Deixe as datas em branco para pegar o relatório do dia atual.</p>
-            <form action="" @submit.prevent="submit()">
+            <form action="#" @submit.prevent="submit()">
                 <div class="field is-grouped is-flex is-align-items-center">
                     <!-- Data inicial -->
                     <strong>Do dia:</strong>
