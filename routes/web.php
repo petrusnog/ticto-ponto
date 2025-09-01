@@ -22,6 +22,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::prefix('pontos')->name('pontos.')->group(function () {
+        Route::get('/', [PontoController::class, 'index'])->name('index');
+        Route::post('/relatorio', [PontoController::class, 'relatorio'])->name('relatorio');
         Route::post('/store', [PontoController::class, 'store'])->name('store');
     });
 });

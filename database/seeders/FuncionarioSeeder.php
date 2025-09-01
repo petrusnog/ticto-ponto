@@ -21,6 +21,7 @@ class FuncionarioSeeder extends Seeder
             'email' => 'pnogueira@ticto.com',
             'cargo' => 'Full Stack Developer',
             'password' => 'funcionariosenha',
+            'admin_id' => User::where('email', 'gpetersen@ticto.com')->first()->id,
             'role_id' => $funcionarioRole->id
         ]);
 

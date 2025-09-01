@@ -65,7 +65,7 @@ const registrarPonto = () => {
             </button>
 
             <div v-if="pontos.data" class="mt-5">
-               <h2 class="title is-4">Pontos registrados</h2>
+               <h2 class="title is-4">Ultimos pontos registrados</h2>
                <ul>
                   <li v-for="ponto in pontos.data" :key="ponto.id">
                      <strong>{{ ponto.nome }} ({{ ponto.cpf }})</strong> -

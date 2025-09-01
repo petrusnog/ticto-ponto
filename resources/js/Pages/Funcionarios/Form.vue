@@ -38,7 +38,6 @@ const submit = () => {
         // Edição de funcionário.
         form.put(route('funcionarios.update', props.funcionario.id), {
             onError: () => {
-                console.log(form.errors)
                 errorMessage.value = form.errors
             }
         })
@@ -46,7 +45,6 @@ const submit = () => {
         // Criação de funcionário.
         form.post(route('funcionarios.store'), {
             onError: () => {
-                console.log(form.errors);
                 errorMessage.value = form.errors
             }
         });

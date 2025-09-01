@@ -14,6 +14,7 @@ class DashboardController extends Controller
     {
         $pontos = Ponto::query()
             ->whereBelongsTo(Auth::user(), 'user')
+            ->orderBy('created_at', 'desc')
             ->paginate(Ponto::QUANTIDADE_POR_PAGINA)
             ->appends(request()->query());
 

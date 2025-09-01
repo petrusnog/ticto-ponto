@@ -23,7 +23,7 @@ const role = computed(() => user.value?.role?.name ?? null)
                 <li class="mb-2"><a @click.prevent="goTo('funcionarios.index')"
                         :class="{ 'is-active': route().current('funcionarios.*') }"><i class="fas fa-users"></i>
                         Funcionários</a></li>
-                <li class="mb-2"><a><i class="fas fa-chart-line"></i> Relatórios</a></li>
+                <li class="mb-2"><a  @click.prevent="goTo('pontos.index')"><i class="fas fa-chart-line"></i> Relatórios</a></li>
             </ul>
         </div>
 
